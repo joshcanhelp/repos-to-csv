@@ -1,10 +1,12 @@
-// Requires
+// requires
 const http = require('http');
 const url = require('url');
+
+// npm packages
 const dotenv = require('dotenv');
 const GitHub = require('github-api');
 
-// Vars
+// vars
 const hostname = '127.0.0.1';
 const port = 5000;
 
@@ -29,9 +31,20 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Set the output format based on URL param.
   const query = url.parse(req.url, true).query;
-  const format = query.format || 'csv';
+
+  // Check for repos.
+  const repos = query.repos;
+  if (!repos) {
+    res.statusCode = 500;
+    res.end('No repos');
+    return;
+  }
+
+  const promises = [];
+  repos.split(',').forEach((name) => {
+    promises.push(getRepos(name));
+  });
 
   // Basic response headers
   res.setHeader('Pragma', 'public');
@@ -40,6 +53,8 @@ const server = http.createServer((req, res) => {
   res.setHeader('Cache-Control', 'private');
   res.statusCode = 200;
 
+  // Check format and set headers
+  const format = query.format || 'csv';
   if ('csv' === format) {
 
     // CSV output response headers and CSV header.
@@ -52,18 +67,14 @@ const server = http.createServer((req, res) => {
     // HTML output response headers.
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
   } else {
-    
+
     // Invalid format.
     res.statusCode = 500;
     res.end('Invalid format');
+    return;
   }
 
-  Promise.all([
-    getRepos('auth0'),
-    getRepos('auth0-community'),
-    getRepos('auth0-samples')
-  ])
-    .then((data) => {
+  Promise.all(promises).then((data) => {
 
       // Combine all promised arrays into a single one to iterate through.
       var allRepos = [];
@@ -80,13 +91,11 @@ const server = http.createServer((req, res) => {
 
       // Display.
       res.end(output);
-    })
-    .catch((err) => {
+    }).catch((err) => {
 
       // Show the error message.
       res.end(err.response.data.message);
-    })
-
+    });
 });
 
 server.listen(port, hostname, () => {
