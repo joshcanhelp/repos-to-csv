@@ -15,14 +15,14 @@ vim .env
 
 Add your [personal access token](https://github.com/settings/tokens) or username and password to increase your API limits (not required but greatly helps if you're troubleshooting).
 
-Now,install:
+Now, install:
 
 ```bash
 npm install
 node index.js
 ```
 
-Open your browser and go to [localhost:5000/?format=html&repos=github-tools](http://localhost:5000/?format=html&repos=github-tools) and you should see all the public, source, non-archived repos from [Tools for GitHub](https://github.com/github-tools?utf8=%E2%9C%93&q=stars%3A%3E1&type=source&language=) with more than one star.
+Open your browser and go to [localhost:5000?format=html&repos=github-tools](http://localhost:5000/?format=html&repos=github-tools) and you should see all the public, source, non-archived repos from [Tools for GitHub](https://github.com/github-tools?utf8=%E2%9C%93&q=stars%3A%3E1&type=source&language=) with more than one star.
 
 ![Output example](screenshot-01.png)
 
