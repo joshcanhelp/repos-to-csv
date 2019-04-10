@@ -13,7 +13,7 @@ cp example.env .env
 vim .env
 ```
 
-Add your [personal access token](https://github.com/settings/tokens) or username and password to increase your API limits (not required but greatly helps if you're troubleshooting).
+Add your [personal access token](https://github.com/settings/tokens) or username and password to `.env` to increase your API limits (not required but greatly helps if you're troubleshooting).
 
 Now, install:
 
@@ -30,3 +30,5 @@ Options:
 
 - Change `format` to `csv` to get a CSV output you can save and open in Excel, Google Docs, or another editor.
 - Add multiple repos, separated by a comma, to see multiple orgs together.
+- Add a `stars` parameter to set the minimum number of stars (default is `1`)
+- Add a `topic` parameter to filter by topics.
